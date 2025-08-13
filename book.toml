@@ -1,7 +1,7 @@
 [book]
-title = "My Wiki Title"
-authors = ["Your Name"]
-description = "A description of my wiki."
+title = "Okachamie Codex"
+authors = ["Okachamie"]
+description = "Insert description here."
 src = "src"
 
 [output.html]
