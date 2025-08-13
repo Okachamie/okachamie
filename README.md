@@ -1,5 +1,7 @@
 ## Hi there 👋
 
+https://okachamie.github.io/okachamie-codex/
+
 <!--
 **Okachamie/okachamie** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
