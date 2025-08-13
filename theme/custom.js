@@ -1,70 +1,120 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.createElement('div');
-  container.id = 'starfield-container';
-  document.body.prepend(container);
+    // Create a canvas element and append it to the body
+    const canvas = document.createElement('canvas');
+    canvas.id = 'supernova-canvas';
+    document.body.insertBefore(canvas, document.body.firstChild);
+    const ctx = canvas.getContext('2d');
 
-  const numStars = 200;
-  const stars = [];
+    let width, height;
+    let particles = [];
 
-  // Create stars
-  for (let i = 0; i < numStars; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    const size = Math.random() * 2 + 1; // Size between 1px and 3px
-    star.style.width = `${size}px`;
-    star.style.height = `${size}px`;
-    star.style.top = `${Math.random() * 100}%`;
-    star.style.left = `${Math.random() * 100}%`;
-    star.style.animationDuration = `${Math.random() * 200 + 100}s`; // Slow drift
-    star.style.animationDelay = `-${Math.random() * 300}s`;
+    // Particle class to represent a point in the supernova
+    class Particle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.5; // Velocity x
+            this.vy = (Math.random() - 0.5) * 0.5; // Velocity y
+            this.radius = Math.random() * 2 + 1;
+            this.color = `hsla(${Math.random() * 360}, 100%, 70%, 0.8)`;
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Bounce off edges
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+    }
     
-    // Store original position and other properties for animation
-    const starObj = {
-      element: star,
-      origX: parseFloat(star.style.left),
-      origY: parseFloat(star.style.top),
-      vx: 0,
-      vy: 0
+    // Central glowing orb
+    const centerOrb = {
+        x: 0,
+        y: 0,
+        radius: 0,
+        maxRadius: 0,
+        colors: [
+            'rgba(255, 100, 255, 0.1)',
+            'rgba(170, 100, 255, 0.08)',
+            'rgba(100, 150, 255, 0.05)',
+            'rgba(100, 255, 255, 0.02)'
+        ]
     };
-    stars.push(starObj);
-    container.appendChild(star);
-  }
 
-  let mouseX = 0;
-  let mouseY = 0;
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
 
-  // Animation loop for cursor interaction
-  function animate() {
-    const repulsionStrength = 0.15; // How much stars move away
-    const friction = 0.9; // Slows down the star movement
-
-    stars.forEach(star => {
-      const dx = (star.element.offsetLeft + star.element.offsetWidth / 2) - mouseX;
-      const dy = (star.element.offsetTop + star.element.offsetHeight / 2) - mouseY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      
-      if (distance < 150) { // Only affect stars within 150px radius
-        const angle = Math.atan2(dy, dx);
-        const force = (150 - distance) / 150; // Force is stronger when closer
+    function init() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
         
-        star.vx += Math.cos(angle) * force * repulsionStrength;
-        star.vy += Math.sin(angle) * force * repulsionStrength;
-      }
+        centerOrb.x = width / 2;
+        centerOrb.y = height / 2;
+        centerOrb.maxRadius = Math.min(width, height) * 0.8;
 
-      // Apply friction to slow down
-      star.vx *= friction;
-      star.vy *= friction;
+        // Create particles
+        particles = [];
+        const particleCount = Math.floor((width * height) / 20000); // Adjust density based on screen size
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
 
-      // Apply the velocity to the star's transform
-      star.element.style.transform = `translate(${star.vx}px, ${star.vy}px)`;
-    });
+    function animate() {
+        // Clear canvas with a transparent trail effect
+        ctx.fillStyle = 'rgba(44, 42, 62, 0.1)';
+        ctx.fillRect(0, 0, width, height);
 
-    requestAnimationFrame(animate);
-  }
+        // Draw the central glowing orb
+        for (let i = 0; i < centerOrb.colors.length; i++) {
+            const radius = centerOrb.maxRadius * ((i + 1) / centerOrb.colors.length) * (0.8 + Math.sin(Date.now() * 0.0002 + i) * 0.2);
+            const gradient = ctx.createRadialGradient(centerOrb.x, centerOrb.y, 0, centerOrb.x, centerOrb.y, radius);
+            gradient.addColorStop(0, centerOrb.colors[i].replace('0.1', '0.2')); // Brighter center
+            gradient.addColorStop(1, centerOrb.colors[i]);
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerOrb.x, centerOrb.y, radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
 
-  animate();
+
+        // Update and draw particles
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+
+        // Draw lines between close particles to create a constellation effect
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 150) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // Event listeners
+    window.addEventListener('resize', init);
+
+    // Initial setup and start animation
+    init();
+    animate();
 });
