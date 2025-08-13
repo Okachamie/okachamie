@@ -1,0 +1,9 @@
+[book]
+title = "My Wiki Title"
+authors = ["Your Name"]
+description = "A description of my wiki."
+src = "src"
+
+[output.html]
+additional-css = ["theme/custom.css"]
+additional-js = ["theme/custom.js"]
