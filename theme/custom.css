@@ -1,129 +1,97 @@
-/* --- Arcane Codex Theme --- */
-
-/* --- Fonts and Base Styles --- */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600&display=swap');
+/* --- Digital Cosmos Theme --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 :root {
-    --main-bg-color: #0d0d1a; /* Deep obsidian */
-    --content-bg-color: rgba(18, 18, 29, 0.85); /* Slightly transparent content area */
-    --primary-text-color: #e0e0e0;
-    --header-text-color: #ffffff;
-    --accent-purple: #9b59b6;
-    --accent-red: #c0392b;
-    --border-color: rgba(155, 89, 182, 0.3);
-    --link-color: var(--accent-purple);
-    --link-hover-color: var(--accent-red);
-
-    /* Font Families */
-    --font-family-serif: 'Cinzel', serif;
-    --font-family-sans-serif: 'Inter', sans-serif;
+  --space-black: #0a0a14;
+  --vibrant-purple: #9b59b6;
+  --energetic-red: #e74c3c;
+  --glow-color: rgba(155, 89, 182, 0.7);
+  --text-primary: #ecf0f1;
+  --text-secondary: #bdc3c7;
 }
 
+/* --- Base & Typography --- */
 body {
-    background-color: var(--main-bg-color);
-    color: var(--primary-text-color);
-    font-family: var(--font-family-sans-serif);
-    overflow-x: hidden; /* Prevent horizontal scroll */
+  background-color: var(--space-black) !important;
+  color: var(--text-primary) !important;
+  font-family: 'Poppins', sans-serif !important;
+  overflow: hidden; /* Hide scrollbars from starfield overflow */
 }
 
-/* --- Animated Gradient Background --- */
-.gradient-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: linear-gradient(-45deg, #0d0d1a, #2c3e50, #9b59b6, #c0392b);
-    background-size: 400% 400%;
-    animation: gradient-flow 20s ease infinite;
-    filter: blur(10px); /* Softens the background */
+h1, h2, h3 {
+  color: var(--text-primary);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(236, 240, 241, 0.1);
 }
 
-@keyframes gradient-flow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+a {
+  color: var(--vibrant-purple);
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-
-/* --- Main Content Styling --- */
-.book .book-body, .book .book-summary {
-    background-color: transparent;
+a:hover {
+  color: var(--text-primary);
+  text-shadow: 0 0 15px var(--glow-color);
 }
 
-.page-wrapper {
-    background-color: var(--content-bg-color);
-    backdrop-filter: blur(5px); /* Frosted glass effect */
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+/* --- mdBook Specific Overrides --- */
+.book-summary ul.summary li a,
+.book-summary ul.summary li span {
+    color: var(--text-secondary);
 }
-
-/* --- Typography --- */
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-family-serif);
-    color: var(--header-text-color);
-    text-shadow: 0 0 5px var(--accent-purple);
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 0.3em;
-}
-
-a, .chapter a {
-    color: var(--link-color);
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-a:hover, .chapter a:hover {
-    color: var(--link-hover-color);
-    text-shadow: 0 0 8px var(--accent-red);
-    text-decoration: none;
-}
-
-/* --- Sidebar / Navigation --- */
-.book .book-summary {
-    border-right: 1px solid var(--border-color);
-}
-
-.book-summary ul.summary li.active>a {
-    color: var(--accent-red);
+.book-summary ul.summary li.active > a {
+    color: var(--text-primary);
     font-weight: bold;
 }
-
-/* --- Code Blocks --- */
-code, pre {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
+.page-wrapper, .book .book-body, .book .book-header {
+  background-color: transparent !important;
 }
 
-/* --- Homepage Logo --- */
-.homepage-logo-container {
-    text-align: center;
-    margin: 2rem 0;
+/* --- Call-to-Action Button Style --- */
+.cta-button {
+  display: inline-block;
+  padding: 12px 28px;
+  border: 2px solid var(--vibrant-purple);
+  border-radius: 50px;
+  background-color: transparent;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.1em;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px transparent;
 }
 
-.homepage-logo {
-    max-width: 200px;
-    width: 100%;
-    height: auto;
-    border-radius: 50%;
-    border: 3px solid var(--accent-purple);
-    box-shadow: 0 0 15px var(--accent-purple), 0 0 25px var(--accent-red) inset;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+.cta-button:hover {
+  background-color: var(--vibrant-purple);
+  color: var(--text-primary);
+  box-shadow: 0 0 25px var(--glow-color);
+  transform: translateY(-3px) scale(1.05);
 }
 
-.homepage-logo:hover {
-    transform: scale(1.05) rotate(5deg);
-    box-shadow: 0 0 25px var(--accent-red), 0 0 40px var(--accent-purple) inset;
+/* --- Starfield Canvas --- */
+#starfield-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
 }
 
-/* --- Responsive Design --- */
-@media (max-width: 600px) {
-    .page-wrapper {
-        margin: 0;
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-    }
+.star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  animation: drift linear infinite;
+}
+
+@keyframes drift {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-1000px);
+  }
 }
