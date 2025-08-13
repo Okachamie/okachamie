@@ -1,8 +1,7 @@
-<div class="homepage-logo-container">
-<img src="okachamie_logo.png" alt="Okachamie Logo" class="homepage-logo" />
-</div>
-Welcome to the Codex
+# Welcome to the Digital Cosmos
 
-This is a central repository for knowledge, guides, and resources. Navigate through the chapters to uncover the secrets held within.
+This is the central hub for our guides, resources, and documentation. Explore the frontier of our technology and discover everything you need to build amazing things.
 
-The path to understanding begins with a single step. Choose a topic from the sidebar to begin your journey.
+<br><br>
+
+<a href="introduction.html" class="cta-button">Begin Your Journey</a>
